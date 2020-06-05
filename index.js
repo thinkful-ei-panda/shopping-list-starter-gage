@@ -1,9 +1,12 @@
+/* eslint-disable no-undef */
+'use strict';
+
 const store = {
   items: [
-    { id: cuid(), name: 'apples', checked: false },
-    { id: cuid(), name: 'oranges', checked: false },
-    { id: cuid(), name: 'milk', checked: true },
-    { id: cuid(), name: 'bread', checked: false }
+    { id: cuid(), name: 'apples', checked: false ,editing: false },
+    { id: cuid(), name: 'oranges', checked: false  ,editing: false },
+    { id: cuid(), name: 'milk', checked: true  ,editing: false },
+    { id: cuid(), name: 'bread', checked: false ,editing: false }
   ],
   hideCheckedItems: false
 };
@@ -25,6 +28,9 @@ const generateItemElement = function (item) {
         </button>
         <button class='shopping-item-delete js-item-delete'>
           <span class='button-label'>delete</span>
+        </button>
+        <button class='shopping-item-edit js-item-edit'>
+          <span class='button-label'>edit</span>
         </button>
       </div>
     </li>`;
@@ -113,13 +119,29 @@ const deleteListItem = function (id) {
   // a removeCount of 1.
   store.items.splice(index, 1);
 };
+//when edit is clicked it need to pop up a text box with the val of the item as it's placeholder,
+// and what ever is submited need to replace item.
+//how tho?
+
+const setEditing = ( ) => {
+  const id = getItemIdFromElement(event.currentTarget);
+  id.editing = true 
+};
+
+const handleEditItemClicked = () => {
+  $('.js-shopping-list').on('click','.js-item-edit', () =>{
+    const id = getItemIdFromElement(event.currentTarget);
+
+  })
+};
+
 
 const handleDeleteItemClicked = function () {
   // Like in `handleItemCheckClicked`, 
   // we use event delegation.
   $('.js-shopping-list').on('click', '.js-item-delete', event => {
     // Get the index of the item in store.items.
-    const id = getItemIdFromElement(event.currentTarget);
+    const id = getItemIdFromElement(event.currentTarget);(event.currentTarget);
     // Delete the item.
     deleteListItem(id);
     // Render the updated shopping list.
@@ -160,6 +182,7 @@ const handleShoppingList = function () {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleToggleFilterClick();
+  handleEditItemClicked();
 };
 
 // when the page loads, call `handleShoppingList`
