@@ -1,12 +1,13 @@
+/* eslint-disable no-empty */
 /* eslint-disable no-undef */
 'use strict';
 
 const store = {
   items: [
-    { id: cuid(), name: 'apples', checked: false ,editing: false },
-    { id: cuid(), name: 'oranges', checked: false  ,editing: false },
-    { id: cuid(), name: 'milk', checked: true  ,editing: false },
-    { id: cuid(), name: 'bread', checked: false ,editing: false }
+    { id: cuid(), name: 'apples', checked: false },
+    { id: cuid(), name: 'oranges', checked: false },
+    { id: cuid(), name: 'milk', checked: true },
+    { id: cuid(), name: 'bread', checked: false }
   ],
   hideCheckedItems: false
 };
@@ -15,7 +16,7 @@ const generateItemElement = function (item) {
   let itemTitle = `<span class='shopping-item shopping-item__checked'>${item.name}</span>`;
   if (!item.checked) {
     itemTitle = `
-     <span class='shopping-item'>${item.name}</span>
+     <input class='shopping-item' value='${item.name}'>
     `;
   }
 
@@ -28,9 +29,6 @@ const generateItemElement = function (item) {
         </button>
         <button class='shopping-item-delete js-item-delete'>
           <span class='button-label'>delete</span>
-        </button>
-        <button class='shopping-item-edit js-item-edit'>
-          <span class='button-label'>edit</span>
         </button>
       </div>
     </li>`;
@@ -120,28 +118,24 @@ const deleteListItem = function (id) {
   store.items.splice(index, 1);
 };
 //when edit is clicked it need to pop up a text box with the val of the item as it's placeholder,
-// and what ever is submited need to replace item.
+// and what ever is submitted need to replace item.
 //how tho?
 
-const setEditing = ( ) => {
-  const id = getItemIdFromElement(event.currentTarget);
-  id.editing = true 
+function submitNew(id,name){
+  $('.js-shopping-list').on('submit','.shopping-item',function(x){
+    const id = getItemIdFromElement(x.currentTarget);
+    const temp = store.find(x=> x.id === id);
+    log(temp);
+  });
+  
 };
-
-const handleEditItemClicked = () => {
-  $('.js-shopping-list').on('click','.js-item-edit', () =>{
-    const id = getItemIdFromElement(event.currentTarget);
-
-  })
-};
-
 
 const handleDeleteItemClicked = function () {
   // Like in `handleItemCheckClicked`, 
   // we use event delegation.
   $('.js-shopping-list').on('click', '.js-item-delete', event => {
     // Get the index of the item in store.items.
-    const id = getItemIdFromElement(event.currentTarget);(event.currentTarget);
+    const id = getItemIdFromElement(event.currentTarget);
     // Delete the item.
     deleteListItem(id);
     // Render the updated shopping list.
